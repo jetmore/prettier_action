@@ -46,6 +46,13 @@ PACKAGE_LOCK_EXISTS=0
 if [ -f 'package-lock.json' ]; then
   PACKAGE_LOCK_EXISTS=1
 fi
+if [ ! -n "$PACKAGE_LOCK_EXISTS" ] ; then
+  echo "HERE 0"
+fi
+
+echo "HERE 0.0"
+
+echo $PACKAGE_LOCK_EXISTS
 
 # npm install --silent prettier@$INPUT_PRETTIER_VERSION
 npm install --verbose prettier@$INPUT_PRETTIER_VERSION
