@@ -42,6 +42,7 @@ cd "$INPUT_WORKING_DIRECTORY"
 
 echo "Installing prettier..."
 
+PACKAGE_LOCK_EXISTS=
 if [ -f 'package-lock.json' ]; then
   PACKAGE_LOCK_EXISTS=1
 fi
