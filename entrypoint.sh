@@ -42,7 +42,7 @@ cd "$INPUT_WORKING_DIRECTORY"
 
 echo "Installing prettier..."
 
-PACKAGE_LOCK_EXISTS=
+PACKAGE_LOCK_EXISTS=0
 if [ -f 'package-lock.json' ]; then
   PACKAGE_LOCK_EXISTS=1
 fi
@@ -91,7 +91,7 @@ fi
 echo "HERE 1"
 
 if [ -f 'package-lock.json' ]; then
-  if $PACKAGE_LOCK_EXISTS; then
+  if [ $PACKAGE_LOCK_EXISTS = 1 ] ; then
 echo "HERE 2"
     git checkout -- package-lock.json
   else
