@@ -67,7 +67,9 @@ echo "Prettifying files..."
 echo "Files:"
 ## not sure why I have to specify the path here
 /home/runner/work/GreenFiling/GreenFiling/node_modules/.bin/prettier $INPUT_PRETTIER_OPTIONS \
-  || { PRETTIER_RESULT=$?; echo "Problem running prettier with $INPUT_PRETTIER_OPTIONS"; exit 1; } >> $GITHUB_STEP_SUMMARY
+  || { echo "HERE"; PRETTIER_RESULT=$?; echo "Problem running prettier with $INPUT_PRETTIER_OPTIONS"; exit 2; } >> $GITHUB_STEP_SUMMARY
+
+
 
 echo "Prettier result: $PRETTIER_RESULT"
 
