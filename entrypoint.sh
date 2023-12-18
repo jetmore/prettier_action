@@ -35,22 +35,18 @@ _git_changed() {
     [[ -n "$(git status -s)" ]]
 }
 
+
+PACKAGE_LOCK_EXISTS=0
+if [ -f 'package-lock.json' ]; then
+  PACKAGE_LOCK_EXISTS=1
+fi
+
 (
 # PROGRAM
 # Changing to the directory
 cd "$INPUT_WORKING_DIRECTORY"
 
 echo "Installing prettier..."
-
-PACKAGE_LOCK_EXISTS=0
-if [ -f 'package-lock.json' ]; then
-  PACKAGE_LOCK_EXISTS=1
-fi
-if [ ! -n "$PACKAGE_LOCK_EXISTS" ] ; then
-  echo "HERE 0"
-fi
-
-echo "HERE 0.0"
 
 echo "VAR 1 $PACKAGE_LOCK_EXISTS"
 
