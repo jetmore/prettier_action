@@ -52,7 +52,7 @@ fi
 
 echo "HERE 0.0"
 
-echo $PACKAGE_LOCK_EXISTS
+echo "VAR 1 $PACKAGE_LOCK_EXISTS"
 
 # npm install --silent prettier@$INPUT_PRETTIER_VERSION
 npm install --verbose prettier@$INPUT_PRETTIER_VERSION
@@ -60,6 +60,7 @@ npm install --verbose prettier@$INPUT_PRETTIER_VERSION
 # find / -name '*prettier*' -print
 echo PATH: $PATH
 
+echo "VAR 2 $PACKAGE_LOCK_EXISTS"
 # Install plugins
 if [ -n "$INPUT_PRETTIER_PLUGINS" ]; then
     for plugin in $INPUT_PRETTIER_PLUGINS; do
@@ -74,6 +75,7 @@ if [ -n "$INPUT_PRETTIER_PLUGINS" ]; then
 fi
 )
 
+echo "VAR 3 $PACKAGE_LOCK_EXISTS"
 PRETTIER_RESULT=0
 echo "Prettifying files..."
 echo "Files:"
@@ -81,6 +83,7 @@ echo "Files:"
 /home/runner/work/GreenFiling/GreenFiling/node_modules/.bin/prettier $INPUT_PRETTIER_OPTIONS \
   || { echo "HERE"; PRETTIER_RESULT=$?; echo "Problem running prettier with $INPUT_PRETTIER_OPTIONS"; exit 2; } >> $GITHUB_STEP_SUMMARY
 
+echo "VAR 4 $PACKAGE_LOCK_EXISTS"
 
 
 echo "Prettier result: $PRETTIER_RESULT"
