@@ -42,7 +42,9 @@ cd "$INPUT_WORKING_DIRECTORY"
 
 echo "Installing prettier..."
 
-npm install --silent prettier@$INPUT_PRETTIER_VERSION
+# npm install --silent prettier@$INPUT_PRETTIER_VERSION
+npm install prettier@$INPUT_PRETTIER_VERSION
+echo "prettier:" `which prettier`
 
 # Install plugins
 if [ -n "$INPUT_PRETTIER_PLUGINS" ]; then
