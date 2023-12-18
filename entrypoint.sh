@@ -44,7 +44,9 @@ echo "Installing prettier..."
 
 # npm install --silent prettier@$INPUT_PRETTIER_VERSION
 npm install --verbose prettier@$INPUT_PRETTIER_VERSION
+echo BIN: $BIN
 echo "prettier:" `which prettier`
+find / -type f -print
 
 # Install plugins
 if [ -n "$INPUT_PRETTIER_PLUGINS" ]; then
