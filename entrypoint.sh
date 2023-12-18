@@ -42,6 +42,10 @@ cd "$INPUT_WORKING_DIRECTORY"
 
 echo "Installing prettier..."
 
+if [ -f 'package-lock.json' ]; then
+  PACKAGE_LOCK_EXISTS=1
+fi
+
 # npm install --silent prettier@$INPUT_PRETTIER_VERSION
 npm install --verbose prettier@$INPUT_PRETTIER_VERSION
 # echo "prettier:" `which prettier`
@@ -86,8 +90,13 @@ fi
 echo "HERE 1"
 
 if [ -f 'package-lock.json' ]; then
+  if $PACKAGE_LOCK_EXISTS; then
 echo "HERE 2"
-  git checkout -- package-lock.json
+    git checkout -- package-lock.json
+  else
+echo "HERE 2.1"
+    /bin/rm package-lock.json
+  fi
 else
 echo "HERE 3"
   echo "No package-lock.json file."
