@@ -44,8 +44,8 @@ echo "Installing prettier..."
 
 # npm install --silent prettier@$INPUT_PRETTIER_VERSION
 npm install --verbose prettier@$INPUT_PRETTIER_VERSION
-echo "prettier:" `which prettier`
-find / -name '*prettier*' -print
+# echo "prettier:" `which prettier`
+# find / -name '*prettier*' -print
 echo PATH: $PATH
 
 # Install plugins
@@ -65,7 +65,8 @@ fi
 PRETTIER_RESULT=0
 echo "Prettifying files..."
 echo "Files:"
-prettier $INPUT_PRETTIER_OPTIONS \
+## not sure why I have to specify the path here
+/home/runner/work/GreenFiling/GreenFiling/node_modules/.bin/prettier $INPUT_PRETTIER_OPTIONS \
   || { PRETTIER_RESULT=$?; echo "Problem running prettier with $INPUT_PRETTIER_OPTIONS"; exit 1; } >> $GITHUB_STEP_SUMMARY
 
 echo "Prettier result: $PRETTIER_RESULT"
