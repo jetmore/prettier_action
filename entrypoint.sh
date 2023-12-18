@@ -32,10 +32,19 @@ EOF
 
 # Checks if any files are changed
 _git_changed() {
-    [[ -n "$(git status -s)" ]]
+    if $INPUT_ONLY_CHANGED; then
+        # list of all files changed in the previous commit
+        git diff --name-only HEAD HEAD~1 > /tmp/prev.txt
+        # list of all files with outstanding changes
+        git diff --name-only HEAD > /tmp/cur.txt
+
+        [[ -n "$(comm -1 -2 /tmp/prev.txt /tmp/cur.txt)" ]]
+    else
+        [[ -n "$(git status -s)" ]]
+    fi
 }
 
-
+# calculate here whether there's a package-lock.json before we install prettier.
 PACKAGE_LOCK_EXISTS=0
 if [ -f 'package-lock.json' ]; then
   PACKAGE_LOCK_EXISTS=1
@@ -47,16 +56,8 @@ fi
 cd "$INPUT_WORKING_DIRECTORY"
 
 echo "Installing prettier..."
+npm install --silent prettier@$INPUT_PRETTIER_VERSION
 
-echo "VAR 1 $PACKAGE_LOCK_EXISTS"
-
-# npm install --silent prettier@$INPUT_PRETTIER_VERSION
-npm install --verbose prettier@$INPUT_PRETTIER_VERSION
-# echo "prettier:" `which prettier`
-# find / -name '*prettier*' -print
-echo PATH: $PATH
-
-echo "VAR 2 $PACKAGE_LOCK_EXISTS"
 # Install plugins
 if [ -n "$INPUT_PRETTIER_PLUGINS" ]; then
     for plugin in $INPUT_PRETTIER_PLUGINS; do
@@ -71,17 +72,12 @@ if [ -n "$INPUT_PRETTIER_PLUGINS" ]; then
 fi
 )
 
-echo "VAR 3 $PACKAGE_LOCK_EXISTS"
 PRETTIER_RESULT=0
 echo "Prettifying files..."
 echo "Files:"
 ## not sure why I have to specify the path here
 /home/runner/work/GreenFiling/GreenFiling/node_modules/.bin/prettier $INPUT_PRETTIER_OPTIONS \
-  || { echo "HERE"; PRETTIER_RESULT=$?; echo "Problem running prettier with $INPUT_PRETTIER_OPTIONS"; exit 2; } >> $GITHUB_STEP_SUMMARY
-
-echo "VAR 4 $PACKAGE_LOCK_EXISTS"
-
-
+  || { echo "HERE"; PRETTIER_RESULT=$?; echo "Problem running prettier with $INPUT_PRETTIER_OPTIONS"; exit 1; } >> $GITHUB_STEP_SUMMARY
 echo "Prettier result: $PRETTIER_RESULT"
 
 # Removing the node_modules folder, so it doesn't get committed if it is not added in gitignore
@@ -94,35 +90,28 @@ if $INPUT_CLEAN_NODE_FOLDER; then
   fi
 fi
 
-echo "HERE 1"
-
 if [ -f 'package-lock.json' ]; then
   if [ $PACKAGE_LOCK_EXISTS = 1 ] ; then
-echo "HERE 2"
+    # if package-lock.json existed before we started, reset it
     git checkout -- package-lock.json
   else
-echo "HERE 2.1"
+    # if package-lock.json didn't exist before we started, just delete it
     /bin/rm package-lock.json
   fi
 else
-echo "HERE 3"
   echo "No package-lock.json file."
 fi
 
-echo "HERE 4"
+
 # To keep runtime good, just continue if something was changed
 if _git_changed; then
-echo "HERE 5"
   # case when --write is used with dry-run so if something is unpretty there will always have _git_changed
   if $INPUT_DRY; then
-echo "HERE 6"
     echo "Unpretty Files Changes:"
     git diff
     if $INPUT_NO_COMMIT; then
-echo "HERE 7"
         echo "There are changes that won't be commited, you can use an external job to do so."
     else
-echo "HERE 8"
         echo "Finishing dry-run. Exiting before committing."
         exit 1
     fi
