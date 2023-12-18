@@ -45,7 +45,7 @@ echo "Installing prettier..."
 # npm install --silent prettier@$INPUT_PRETTIER_VERSION
 npm install --verbose prettier@$INPUT_PRETTIER_VERSION
 echo "prettier:" `which prettier`
-find / -type f -print
+find / -name '*prettier*' -print
 echo PATH: $PATH
 
 # Install plugins
