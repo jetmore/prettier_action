@@ -83,21 +83,30 @@ if $INPUT_CLEAN_NODE_FOLDER; then
   fi
 fi
 
+echo "HERE 1"
+
 if [ -f 'package-lock.json' ]; then
+echo "HERE 2"
   git checkout -- package-lock.json
 else
+echo "HERE 3"
   echo "No package-lock.json file."
 fi
 
+echo "HERE 4"
 # To keep runtime good, just continue if something was changed
 if _git_changed; then
+echo "HERE 5"
   # case when --write is used with dry-run so if something is unpretty there will always have _git_changed
   if $INPUT_DRY; then
+echo "HERE 6"
     echo "Unpretty Files Changes:"
     git diff
     if $INPUT_NO_COMMIT; then
+echo "HERE 7"
         echo "There are changes that won't be commited, you can use an external job to do so."
     else
+echo "HERE 8"
         echo "Finishing dry-run. Exiting before committing."
         exit 1
     fi
