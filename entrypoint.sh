@@ -67,6 +67,7 @@ if [ -n "$INPUT_PRETTIER_PLUGINS" ]; then
 fi
 )
 
+echo "GITHUB_ACTION_PATH = $GITHUB_ACTION_PATH"
 PRETTIER_RESULT=0
 echo "Prettifying files..."
 echo "Files:"
