@@ -68,6 +68,7 @@ fi
 )
 
 echo "GITHUB_ACTION_PATH = $GITHUB_ACTION_PATH"
+env
 PRETTIER_RESULT=0
 echo "Prettifying files..."
 echo "Files:"
