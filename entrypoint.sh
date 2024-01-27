@@ -41,6 +41,10 @@ _git_changed() {
 echo "PATH = $PATH"
 echo "current path: " `pwd`
 echo "changing directory to: $INPUT_WORKING_DIRECTORY"
+# cd "$INPUT_WORKING_DIRECTORY"
+if [ -z "$INPUT_WORKING_DIRECTORY" ] ; then
+  INPUT_WORKING_DIRECTORY=$GITHUB_ACTION_PATH
+fi
 cd "$INPUT_WORKING_DIRECTORY"
 echo "new directory: " `pwd`
 
