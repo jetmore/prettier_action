@@ -32,7 +32,16 @@ EOF
 
 # Checks if any files are changed
 _git_changed() {
-    [[ -n "$(git status -s)" ]]
+    if $INPUT_ONLY_CHANGED; then
+        # list of all files changed in the previous commit
+        git diff --name-only HEAD HEAD~1 > /tmp/prev.txt
+        # list of all files with outstanding changes
+        git diff --name-only HEAD > /tmp/cur.txt
+
+        [[ -n "$(comm -1 -2 /tmp/prev.txt /tmp/cur.txt)" ]]
+    else
+        [[ -n "$(git status -s)" ]]
+    fi
 }
 
 (
