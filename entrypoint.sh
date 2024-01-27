@@ -29,6 +29,8 @@ _git_changed() {
 (
 # PROGRAM
 # Changing to the directory
+echo "current path: " `pwd`
+echo "changing directory to: $INPUT_WORKING_DIRECTORY"
 cd "$INPUT_WORKING_DIRECTORY"
 
 echo "Installing prettier..."
