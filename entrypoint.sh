@@ -38,6 +38,7 @@ _git_changed() {
 (
 # PROGRAM
 # Changing to the directory
+echo "PATH = $PATH"
 echo "current path: " `pwd`
 echo "changing directory to: $INPUT_WORKING_DIRECTORY"
 cd "$INPUT_WORKING_DIRECTORY"
