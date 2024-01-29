@@ -92,25 +92,25 @@ fi
 
 # If running under only_changed, reset every modified file that wasn't also modified in the last commit
 # This allows only_changed and dry to work together, and simplified the non-dry logic below
-if $INPUT_ONLY_CHANGED; then
+if [ $INPUT_ONLY_CHANGED = true -o $INPUT_ONLY_CHANGED_PR = true ] ; then
+  BASE_BRANCH=origin/$GITHUB_BASE_REF
+  if $INPUT_ONLY_CHANGED; then
+    BASE_BRANCH=HEAD~1
+  fi
+
+  echo "Resetting changes, removing changes to files not changed since $BASE_BRANCH"
   # list of all files changed in the previous commit
-  git diff --name-only HEAD HEAD~1 > /tmp/prev.txt
+  git diff --name-only HEAD $BASE_BRANCH > /tmp/prev.txt
   # list of all files with outstanding changes
   git diff --name-only HEAD > /tmp/cur.txt
-
-echo PREV:
-cat /tmp/prev.txt
-
-echo CUR:
-cat /tmp/cur.txt
 
   OLDIFS="$IFS"
   IFS=$'\n'
   # get all files that are in prev.txt that aren't also in cur.txt
-  for file in $(comm -1 /tmp/prev.txt /tmp/cur.txt)
+  for file in $(comm -1 -3 /tmp/prev.txt /tmp/cur.txt)
   do
     echo "resetting: $file"
-    # git reset -- "$file"
+    git restore -- "$file"
   done
   IFS="$OLDIFS"
 fi
@@ -131,19 +131,8 @@ if _git_changed; then
     # Calling method to configure the git environemnt
     _git_setup
 
-    # if $INPUT_ONLY_CHANGED; then
-    #   # --diff-filter=d excludes deleted files
-    #   OLDIFS="$IFS"
-    #   IFS=$'\n'
-    #   for file in $(git diff --name-only --diff-filter=d HEAD^..HEAD)
-    #   do
-    #     git add "$file"
-    #   done
-    #   IFS="$OLDIFS"
-    # else
-      # Add changes to git
-      git add "${INPUT_FILE_PATTERN}" || echo "Problem adding your files with pattern ${INPUT_FILE_PATTERN}"
-    # fi
+    # Add changes to git
+    git add "${INPUT_FILE_PATTERN}" || echo "Problem adding your files with pattern ${INPUT_FILE_PATTERN}"
 
     if $INPUT_NO_COMMIT; then
       echo "There are changes that won't be commited, you can use an external job to do so."
