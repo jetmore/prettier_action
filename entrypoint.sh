@@ -52,9 +52,9 @@ echo "FOO1"
         if [[ -n "$OUTPUT_T" ]] ; then
           echo "Prettified files preventing clean run:"
           echo "$OUTPUT_T"
-          return 1
+          return 0
         fi
-        return 0
+        return 1
         # [[ -n "$(comm -1 -2 /tmp/prev.txt /tmp/cur.txt)" ]]
     # elif $INPUT_ONLY_CHANGED; then
     #     # list of all files changed in the previous commit
