@@ -36,7 +36,7 @@ _git_changed() {
     if $INPUT_ONLY_CHANGED; then
       BASE_BRANCH=HEAD~1
     fi
-    if [ $INPUT_ONLY_CHANGED -o $INPUT_ONLY_CHANGED_PR ] ; then
+    if [ $INPUT_ONLY_CHANGED = true -o $INPUT_ONLY_CHANGED_PR = true ] ; then
 echo "FOO2 ($INPUT_ONLY_CHANGED, $INPUT_ONLY_CHANGED_PR, $BASE_BRANCH)"
         # list of all files changed in the previous commit
         git diff --name-only HEAD $BASE_BRANCH > /tmp/prev.txt
