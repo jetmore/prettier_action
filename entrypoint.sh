@@ -51,7 +51,7 @@ echo "FOO2 ($INPUT_ONLY_CHANGED, $INPUT_ONLY_CHANGED_PR, $BASE_BRANCH)"
         fi
         return 1
     else
-echo "FOO2"
+echo "FOO1"
         [[ -n "$(git status -s)" ]]
     fi
 }
