@@ -36,33 +36,20 @@ _git_changed() {
     if $INPUT_ONLY_CHANGED; then
       BASE_BRANCH=HEAD~1
     fi
-echo "FOO"
-    if [ $INPUT_ONLY_CHANGED -o $INPUT_ONLY_CHANGED ] ; then
-echo "FOO1"
-# git fetch
-# git branch
-        echo "proceeding with BASE_BRANCH = $BASE_BRANCH"
+    if [ $INPUT_ONLY_CHANGED -o $INPUT_ONLY_CHANGED_PR ] ; then
+echo "FOO2 ($INPUT_ONLY_CHANGED, $INPUT_ONLY_CHANGED_PR, $BASE_BRANCH)"
         # list of all files changed in the previous commit
         git diff --name-only HEAD $BASE_BRANCH > /tmp/prev.txt
         # list of all files with outstanding changes
         git diff --name-only HEAD > /tmp/cur.txt
 
         OUTPUT_T="$(comm -1 -2 /tmp/prev.txt /tmp/cur.txt)"
-        echo "OUTPUT: $OUTPUT_T"
         if [[ -n "$OUTPUT_T" ]] ; then
           echo "Prettified files preventing clean run:"
           echo "$OUTPUT_T"
           return 0
         fi
         return 1
-        # [[ -n "$(comm -1 -2 /tmp/prev.txt /tmp/cur.txt)" ]]
-    # elif $INPUT_ONLY_CHANGED; then
-    #     # list of all files changed in the previous commit
-    #     git diff --name-only HEAD HEAD~1 > /tmp/prev.txt
-    #     # list of all files with outstanding changes
-    #     git diff --name-only HEAD > /tmp/cur.txt
-
-    #     [[ -n "$(comm -1 -2 /tmp/prev.txt /tmp/cur.txt)" ]]
     else
 echo "FOO2"
         [[ -n "$(git status -s)" ]]
